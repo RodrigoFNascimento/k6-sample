@@ -1,6 +1,6 @@
 import { check } from 'k6';
 import http from "k6/http";
-import bearerToken from "../bearer-token.js";
+import { BASE_URL } from "../config.js";
 
 export const options = {
     vus: 1, // 1 user looping for 1 minute
@@ -12,9 +12,8 @@ export const options = {
   };
 
 export default () => {
-  const res = http.get(`${getBaseUrl()}/weather/`, {
+  const res = http.get(`${BASE_URL}/weatherforecast/`, {
     headers: {
-        Authorization: `Bearer ${bearerToken}`,
         "Content-Type": "application/json"
     }
   });

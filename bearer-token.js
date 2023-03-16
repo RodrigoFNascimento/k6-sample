@@ -1,12 +1,13 @@
 import { post } from "axios";
+import { BASE_URL, USERNAME, PASSWORD } from "config.js";
 
 let bearerToken;
 
 async function authenticate() {
   try {
-    const res = await post(getBaseUrl() + "/authenticate", {
-      username: "test",
-      password: "test"
+    const res = await post(`${BASE_URL}/authenticate`, {
+      username: USERNAME,
+      password: PASSWORD
     });
 
     bearerToken = res.data.access_token;
