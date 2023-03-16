@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check } from 'k6';
 import { BASE_URL } from "../config.js";
+import { authenticate } from "/bearer-token.js";
 
 export const options = {
   stages: [
@@ -16,7 +17,8 @@ export const options = {
 export default () => {
     const res = http.get(`${BASE_URL}/weather/`, {
       headers: {
-          "Content-Type": "application/json"
+        Authorization: `Bearer ${authenticate()}`,
+        "Content-Type": "application/json"
       }
     });
   

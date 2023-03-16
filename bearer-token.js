@@ -1,24 +1,15 @@
-import { post } from "axios";
-import { BASE_URL, USERNAME, PASSWORD } from "config.js";
+import { check } from 'k6';
+import http from 'k6/http';
+import { BASE_URL, USERNAME, PASSWORD } from "/config.js";
 
-let bearerToken;
+export function authenticate() {
+  const loginRes = http.post(`${BASE_URL}/auth/token/login/`, {
+    username: USERNAME,
+    password: PASSWORD,
+  });
 
-async function authenticate() {
-  try {
-    const res = await post(`${BASE_URL}/authenticate`, {
-      username: USERNAME,
-      password: PASSWORD
-    });
+  const authToken = loginRes.json('access');
+  check(authToken, { 'logged in successfully': () => authToken !== '' });
 
-    bearerToken = res.data.access_token;
-    console.log("Authentication successful. Token:", bearerToken);
-  } catch (error) {
-    console.error("Error during authentication:", error);
-  }
+  return authToken;
 }
-
-authenticate();
-
-export default {
-  bearerToken
-};
